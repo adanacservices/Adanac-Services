@@ -346,7 +346,7 @@ export function Home() {
                               const cardProps = project as any;
                               if (cardProps.onNext) cardProps.onNext();
                             }}
-                            className="bg-black/40 text-white border border-white/20 px-6 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
+                            className="cursor-target bg-black/40 text-white border border-white/20 px-6 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
                           >
                             <ProximityText label="Next" />
                             <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -354,7 +354,7 @@ export function Home() {
 
                           <Link
                             to={`/project/${project.id}`}
-                            className="bg-primary text-black px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-[#00FFAA] transition-all transform hover:scale-105 active:scale-95"
+                            className="cursor-target bg-primary text-black px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-[#00FFAA] transition-all transform hover:scale-105 active:scale-95"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <ProximityText label="Details" /> <ArrowRight size={18} />

@@ -242,39 +242,54 @@ const CardSwap: React.FC<CardSwapProps> = ({
 
     // Handlers
     const handlePointerDown = (e: React.PointerEvent) => {
-        if (expandedIndex !== null) return;
         dragStartX.current = e.clientX;
         isDragging.current = true;
 
-        // Stop auto-rotation while interacting
-        clearInterval(intervalRef.current);
-        if (tlRef.current) tlRef.current.pause();
+        if (expandedIndex === null) {
+            // Stop auto-rotation while interacting with stack
+            clearInterval(intervalRef.current);
+            if (tlRef.current) tlRef.current.pause();
+        }
     };
 
     const handlePointerUp = (e: React.PointerEvent) => {
         if (!isDragging.current || dragStartX.current === null) return;
-        isDragging.current = false;
 
         const deltaX = e.clientX - dragStartX.current;
-        const threshold = 50;
+        const threshold = 40; // Smaller threshold for mobile swipe
 
-        if (deltaX < -threshold) {
-            // Swipe Left -> Next
-            swapNext();
-        } else if (deltaX > threshold) {
-            // Swipe Right -> Prev
-            swapPrev();
+        if (Math.abs(deltaX) > threshold) {
+            // It was a swipe, so prevent the next click from triggering expansion/collapse
+            isDragging.current = true; // Keep it true momentarily to block onClick
+            setTimeout(() => { isDragging.current = false; }, 50);
+
+            if (deltaX < 0) {
+                // Swipe Left -> Next
+                if (expandedIndex !== null && window.innerWidth < 768) {
+                    const [front, ...rest] = order.current;
+                    const newOrder = [...rest, front];
+                    order.current = newOrder;
+                    setExpandedIndex(newOrder[0]);
+                } else {
+                    swapNext();
+                }
+            } else {
+                // Swipe Right -> Prev
+                if (expandedIndex !== null && window.innerWidth < 768) {
+                    const last = order.current[order.current.length - 1];
+                    const rest = order.current.slice(0, -1);
+                    const newOrder = [last, ...rest];
+                    order.current = newOrder;
+                    setExpandedIndex(newOrder[0]);
+                } else {
+                    swapPrev();
+                }
+            }
         } else {
-            // Resume if no swipe triggered and not hovering?
-            // If we paused on hover, we rely on mouseleave to resume.
-            // If we just clicked without dragging, we should ensure logic allows click through.
+            isDragging.current = false;
         }
 
-        // Resume interval logic is handled by useEffect or hover handlers mostly.
-        // We should restart interval if not hovering.
-        // However, 'pauseOnHover' is usually true. 
-        // If we dragged, we are likely still hovering.
-        // So we don't force restart here.
+        dragStartX.current = null;
     };
 
     const handlePointerLeave = () => {
@@ -382,15 +397,28 @@ const CardSwap: React.FC<CardSwapProps> = ({
                 overwrite: true
             });
 
-            // Dim others
+            // Position others back in stack and dim them
+            const total = refs.length;
             refs.forEach((r, i) => {
                 if (i !== expandedIndex) {
+                    const visualIndex = order.current.indexOf(i);
+                    const slot = makeSlot(visualIndex, cardDistance, verticalDistance, total);
+
                     gsap.to(r.current, {
+                        x: slot.x,
+                        y: slot.y,
+                        z: slot.z,
+                        xPercent: -50,
+                        yPercent: -50,
+                        zIndex: slot.zIndex,
                         autoAlpha: 0.1,
                         filter: 'blur(8px)',
                         scale: 0.9,
                         duration: 0.6,
-                        overwrite: true
+                        overwrite: true,
+                        skewY: skewAmount,
+                        width: width,
+                        height: height
                     });
                 }
             });

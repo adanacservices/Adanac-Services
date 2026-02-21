@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import FaultyTerminal from '../components/FaultyTerminal'
 import VariableProximity from '../components/VariableProximity'
 import BlurText from '../components/BlurText'
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
 import GlitchText from '../components/GlitchText'
-import CardSwap, { Card } from '../components/CardSwap'
+import CardSwap, { Card, CardContext } from '../components/CardSwap'
 import ElectricBorder from '../components/ElectricBorder'
 import ScrollVelocity from '../components/ScrollVelocity'
 import ProximityText from '../components/ProximityText'
@@ -14,6 +14,22 @@ import BounceCards from '../components/BounceCards'
 import FlowingText from '../components/FlowingText'
 import CountUp from '../components/CountUp'
 import { projects } from '../data/projects'
+
+const PortfolioNextButton = () => {
+  const { onNext } = useContext(CardContext);
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onNext?.();
+      }}
+      className="hidden md:flex cursor-target bg-black/40 text-white border border-white/20 px-6 py-4 rounded-2xl font-bold text-sm items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
+    >
+      <ProximityText label="Next" />
+      <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+    </button>
+  );
+};
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -340,17 +356,7 @@ export function Home() {
                         </div>
 
                         <div className="hidden group-data-[expanded=true]:flex items-center gap-3">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const cardProps = project as any;
-                              if (cardProps.onNext) cardProps.onNext();
-                            }}
-                            className="hidden md:flex cursor-target bg-black/40 text-white border border-white/20 px-6 py-4 rounded-2xl font-bold text-sm items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
-                          >
-                            <ProximityText label="Next" />
-                            <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
-                          </button>
+                          <PortfolioNextButton />
 
                           <Link
                             to={`/project/${project.id}`}

@@ -13,6 +13,8 @@ import React, {
 import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+export const CardContext = React.createContext<{ onNext?: () => void }>({});
+
 export interface CardSwapProps {
     width?: number | string;
     height?: number | string;
@@ -33,13 +35,17 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     onNext?: () => void;
 }
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, isExpanded, ...rest }, ref) => (
+export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, isExpanded, onNext, children, ...rest }, ref) => (
     <div
         ref={ref}
         data-expanded={isExpanded}
         {...rest}
         className={`absolute top-1/2 left-1/2 rounded-xl border border-white bg-black [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${isExpanded ? 'overflow-y-auto scrollbar-hide' : 'overflow-hidden'} ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
-    />
+    >
+        <CardContext.Provider value={{ onNext }}>
+            {children}
+        </CardContext.Provider>
+    </div>
 ));
 Card.displayName = 'Card';
 

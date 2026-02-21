@@ -231,7 +231,7 @@ export function Home() {
       </section>
 
       {/* Featured Portfolio Preview — CardSwap */}
-      <section className="pt-32 pb-64 px-6 overflow-visible">
+      <section className="pt-24 pb-20 px-6 overflow-visible">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
 
           {/* Left Side: Content */}
@@ -359,7 +359,7 @@ export function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="relative py-32 px-6 bg-black/30 overflow-hidden">
+      <section className="relative py-20 px-6 bg-black/30 overflow-hidden">
         <div className="absolute inset-0 bg-mesh opacity-[0.03] pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col items-center">
@@ -369,7 +369,7 @@ export function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mb-24 text-center max-w-3xl"
+              className="mb-16 text-center max-w-3xl"
             >
               <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-8">
                 <ProximityText label="Why" /> <span className="text-primary italic"><ProximityText label="Choose" /></span> <ProximityText label="Adanac Services?" />

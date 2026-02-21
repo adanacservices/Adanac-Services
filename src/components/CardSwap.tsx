@@ -35,7 +35,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, isExpa
         ref={ref}
         data-expanded={isExpanded}
         {...rest}
-        className={`absolute top-1/2 left-1/2 rounded-xl border border-white bg-black [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
+        className={`absolute top-1/2 left-1/2 rounded-xl border border-white bg-black [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] ${isExpanded ? 'overflow-y-auto scrollbar-hide' : 'overflow-hidden'} ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
     />
 ));
 Card.displayName = 'Card';
@@ -282,12 +282,15 @@ const CardSwap: React.FC<CardSwapProps> = ({
         dragStartX.current = null;
     };
 
-    // Auto-close on scroll (Mobile only)
+    // Auto-close on scroll (Mobile only) with threshold to allow internal scroll
     useEffect(() => {
         if (expandedIndex === null || window.innerWidth >= 768) return;
 
+        const initialScroll = window.scrollY;
         const handleScroll = () => {
-            setExpandedIndex(null);
+            if (Math.abs(window.scrollY - initialScroll) > 50) {
+                setExpandedIndex(null);
+            }
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });

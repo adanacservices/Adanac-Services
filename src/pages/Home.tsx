@@ -283,46 +283,71 @@ export function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent group-data-[expanded=true]:via-black/80" />
 
-                    <div className="relative z-10 h-full p-8 flex flex-row gap-8">
-                      {/* Left Side: Main Info */}
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div className="flex justify-end group-data-[expanded=true]:justify-start transition-all">
-                          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-glow">
-                            <ArrowUpRight className="text-black w-5 h-5" />
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-primary font-bold tracking-widest uppercase text-xs mb-3 block">
-                            <ProximityText label={project.category} />
-                          </span>
-                          <h3 className="text-4xl font-display font-bold text-white group-data-[expanded=true]:text-5xl transition-all">
-                            <ProximityText label={project.title} />
-                          </h3>
-                        </div>
-                      </div>
-
-                      {/* Right Side: Description (Visible on Expand) */}
-                      <div className="hidden group-data-[expanded=true]:flex flex-1 flex-col justify-center opacity-0 group-data-[expanded=true]:opacity-100 transition-all duration-500 delay-100">
-                        <h4 className="text-xl font-bold text-white mb-4 border-b border-primary/30 pb-2 inline-block w-fit">
-                          <ProximityText label="Project Overview" />
-                        </h4>
-                        <div className="text-gray-300 text-sm leading-relaxed mb-6">
-                          <ProximityText label={project.shortDescription} />
-                        </div>
-                        <div className="mb-6 flex flex-wrap gap-2">
-                          {project.techStack.slice(0, 3).map(tech => (
-                            <span key={tech} className="text-[10px] text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded">
-                              {tech}
+                    <div className="relative z-10 h-full p-8 flex flex-col justify-between">
+                      {/* Top Section: Tags and Tech Stack Header */}
+                      <div className="flex justify-between items-start">
+                        <div className="flex flex-wrap gap-2 max-w-[40%]">
+                          {project.tags.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white border border-white/10 whitespace-nowrap"
+                            >
+                              {tag}
                             </span>
                           ))}
                         </div>
-                        <Link
-                          to={`/project/${project.id}`}
-                          className="text-primary font-bold hover:underline flex items-center gap-2 cursor-target"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <ProximityText label="Details" /> <ArrowRight className="w-4 h-4" />
-                        </Link>
+
+                        {/* Expanded Content: Tech Stack Title */}
+                        <div className="hidden group-data-[expanded=true]:block transform translate-x-4">
+                          <h4 className="text-xl font-bold text-white flex items-center gap-2">
+                            <Zap size={20} className="text-primary" />
+                            <ProximityText label="Tech Stack" />
+                          </h4>
+                        </div>
+
+                        {/* Unexpanded Content: Arrow Icon */}
+                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-glow group-data-[expanded=true]:hidden">
+                          <ArrowUpRight className="text-black w-5 h-5" />
+                        </div>
+                      </div>
+
+                      {/* Middle Section: Expanded Tech Details */}
+                      <div className="hidden group-data-[expanded=true]:flex flex-row gap-8 items-center h-full py-8">
+                        <div className="flex-1 space-y-4">
+                          <div className="flex flex-wrap gap-2">
+                            {project.techStack.slice(0, 3).map(tech => (
+                              <span key={tech} className="text-[10px] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="text-gray-300 text-sm leading-relaxed max-w-xs">
+                            <ProximityText label={project.shortDescription} />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Section: Title and CTA */}
+                      <div className="flex justify-between items-end">
+                        <div className="space-y-2">
+                          <span className="text-primary font-bold tracking-widest uppercase text-[10px] block">
+                            <ProximityText label={project.category} />
+                          </span>
+                          <h3 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight">
+                            <ProximityText label={project.title.split(' ')[0]} /> <br />
+                            <ProximityText label={project.title.split(' ').slice(1).join(' ')} />
+                          </h3>
+                        </div>
+
+                        <div className="hidden group-data-[expanded=true]:block">
+                          <Link
+                            to={`/project/${project.id}`}
+                            className="bg-primary text-black px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-[#00FFAA] transition-all transform hover:scale-105 active:scale-95"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ProximityText label="Details" /> <ArrowRight size={18} />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </Card>

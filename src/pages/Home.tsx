@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Code, Palette, Rocket, Sparkles, ArrowUpRight, Zap } from 'lucide-react'
+import { ArrowRight, Code, Palette, Rocket, Sparkles, ArrowUpRight, Zap, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import FaultyTerminal from '../components/FaultyTerminal'
 import VariableProximity from '../components/VariableProximity'
@@ -339,7 +339,19 @@ export function Home() {
                           </h3>
                         </div>
 
-                        <div className="hidden group-data-[expanded=true]:block">
+                        <div className="hidden group-data-[expanded=true]:flex items-center gap-3">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const cardProps = project as any;
+                              if (cardProps.onNext) cardProps.onNext();
+                            }}
+                            className="bg-black/40 text-white border border-white/20 px-6 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
+                          >
+                            <ProximityText label="Next" />
+                            <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                          </button>
+
                           <Link
                             to={`/project/${project.id}`}
                             className="bg-primary text-black px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-2 hover:bg-[#00FFAA] transition-all transform hover:scale-105 active:scale-95"

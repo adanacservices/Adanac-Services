@@ -21,6 +21,7 @@ export interface CardSwapProps {
     delay?: number;
     pauseOnHover?: boolean;
     onCardClick?: (idx: number) => void;
+    onNext?: () => void;
     skewAmount?: number;
     easing?: 'linear' | 'elastic';
     children: ReactNode;
@@ -29,6 +30,7 @@ export interface CardSwapProps {
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     customClass?: string;
     isExpanded?: boolean;
+    onNext?: () => void;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, isExpanded, ...rest }, ref) => (
@@ -77,6 +79,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
     delay = 5000,
     pauseOnHover = false,
     onCardClick,
+    onNext,
     skewAmount = 6,
     easing = 'elastic',
     children
@@ -491,6 +494,13 @@ const CardSwap: React.FC<CardSwapProps> = ({
                     }
                 },
                 isExpanded: i === expandedIndex,
+                onNext: () => {
+                    const [front, ...rest] = order.current;
+                    const newOrder = [...rest, front];
+                    order.current = newOrder;
+                    setExpandedIndex(newOrder[0]);
+                    onNext?.();
+                },
                 // Disable default drag behavior on images/links inside
                 onDragStart: (e) => e.preventDefault()
             } as CardProps & React.RefAttributes<HTMLDivElement>)
@@ -507,37 +517,6 @@ const CardSwap: React.FC<CardSwapProps> = ({
             onPointerLeave={handlePointerLeave}
         >
             {rendered}
-
-            {/* Universal Navigation Arrows (Expanded View) */}
-            {expandedIndex !== null && (
-                <>
-                    <button
-                        className="fixed left-4 md:left-12 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-all hover:bg-primary/20 hover:border-primary/30 group"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const last = order.current[order.current.length - 1];
-                            const rest = order.current.slice(0, -1);
-                            const newOrder = [last, ...rest];
-                            order.current = newOrder;
-                            setExpandedIndex(newOrder[0]);
-                        }}
-                    >
-                        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
-                    </button>
-                    <button
-                        className="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-all hover:bg-primary/20 hover:border-primary/30 group"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const [front, ...rest] = order.current;
-                            const newOrder = [...rest, front];
-                            order.current = newOrder;
-                            setExpandedIndex(newOrder[0]);
-                        }}
-                    >
-                        <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                </>
-            )}
         </div>
     );
 };

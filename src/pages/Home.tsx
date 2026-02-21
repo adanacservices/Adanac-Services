@@ -261,8 +261,8 @@ export function Home() {
           </div>
 
           {/* Right Side: Cards */}
-          <div className="flex-1 flex items-center justify-center lg:justify-start w-full lg:-translate-x-32">
-            <div style={{ height: '750px', position: 'relative', width: '100%', maxWidth: '550px' }} className="lg:scale-100">
+          <div className="flex-1 flex items-center justify-center lg:justify-start w-full lg:-translate-x-12">
+            <div className="relative w-full max-w-[550px] h-[400px] md:h-[600px] lg:h-[750px]">
               <CardSwap
                 cardDistance={70}
                 verticalDistance={70}

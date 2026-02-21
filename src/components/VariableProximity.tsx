@@ -118,23 +118,11 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
         }
     };
 
+    const falloffValuesRef = useRef<number[]>([]);
+
     useAnimationFrame(() => {
         if (!containerRef?.current) return;
         const { x, y } = mousePositionRef.current;
-
-        // Optimization: Skip if mouse hasn't moved
-        // However, since we might be scrolling or the element might move, 
-        // strictly checking only mouse x/y might miss updates if the element moves.
-        // But for this effect, it's mostly mouse interaction.
-        if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
-            // We can't return here if we want to support scrolling updates if the container moves relative to viewport 
-            // but without mouse moving. BUT, the mouseListener is on window and calculates relative to container rect.
-            // So if container moves, rect changes, but mouse coordinate arg to updatePosition is same?
-            // Actually updatePosition gets called on mousemove. If we don't move mouse, positionRef doesn't update.
-            // So this optimization is fine for stationary mouse.
-            return;
-        }
-        lastPositionRef.current = { x, y };
 
         const containerRect = containerRef.current.getBoundingClientRect();
 
@@ -152,20 +140,27 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
                 letterCenterY
             );
 
-            if (distance >= radius) {
-                letterRef.style.fontVariationSettings = fromFontVariationSettings;
-                return;
-            }
+            const targetFalloff = distance >= radius ? 0 : calculateFalloff(distance);
 
-            const falloffValue = calculateFalloff(distance);
+            // Damping logic: Lerp current value towards target
+            if (falloffValuesRef.current[index] === undefined) falloffValuesRef.current[index] = 0;
+
+            const currentFalloff = falloffValuesRef.current[index];
+            const smoothing = 0.15; // Lower = smoother/slower, Higher = faster
+            const nextFalloff = currentFalloff + (targetFalloff - currentFalloff) * smoothing;
+
+            falloffValuesRef.current[index] = nextFalloff;
+
+            // Optimization: skip setting style if falloff is practically zero and was zero before
+            if (nextFalloff < 0.001 && currentFalloff < 0.001) return;
+
             const newSettings = parsedSettings
                 .map(({ axis, fromValue, toValue }) => {
-                    const interpolatedValue = fromValue + (toValue - fromValue) * falloffValue;
+                    const interpolatedValue = fromValue + (toValue - fromValue) * nextFalloff;
                     return `'${axis}' ${interpolatedValue}`;
                 })
                 .join(', ');
 
-            interpolatedSettingsRef.current[index] = newSettings;
             letterRef.style.fontVariationSettings = newSettings;
         });
     });

@@ -36,19 +36,20 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
     },
   },
 }
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: [0.6, -0.05, 0.01, 0.99] as any, // Cast to any to bypass type check for now
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1] as any,
     },
   },
 }

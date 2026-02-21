@@ -16,9 +16,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     lenisRef.current = new Lenis({
-      duration: 1.2,
+      duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      wheelMultiplier: 1.1,
       touchMultiplier: 2,
     })
 
@@ -67,7 +68,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           noiseScale={2}
           grainAmount={0.1}
           grainScale={2}
-          grainAnimated={false}
+          grainAnimated={true}
           contrast={1.5}
           gamma={1}
           saturation={0.55}
@@ -82,10 +83,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <AnimatePresence mode="wait">
         <motion.main
           key={location.pathname}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          exit={{ opacity: 0, y: -30 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // Expo-like easing
           className="relative z-10"
         >
           {children}

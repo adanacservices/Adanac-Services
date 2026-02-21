@@ -1,10 +1,26 @@
 import { motion } from 'framer-motion'
-import { ArrowUpRight, ArrowRight, Zap } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowUpRight, ArrowRight, Zap, ChevronRight } from 'lucide-react'
+import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import CardSwap, { Card } from '../components/CardSwap'
+import CardSwap, { Card, CardContext } from '../components/CardSwap'
 import ProximityText from '../components/ProximityText'
 import { projects } from '../data/projects'
+
+const PortfolioNextButton = () => {
+  const { onNext } = useContext(CardContext);
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onNext?.();
+      }}
+      className="hidden md:flex cursor-target bg-black/40 text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm items-center gap-2 hover:bg-white/10 hover:border-white/40 transition-all transform active:scale-95 group/btn"
+    >
+      <ProximityText label="Next" />
+      <ChevronRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+    </button>
+  );
+};
 
 export function Portfolio() {
   const [filter, setFilter] = useState('All')
@@ -92,13 +108,24 @@ export function Portfolio() {
                     {/* Left Side: Main Info */}
                     <div className="flex-1 flex flex-col justify-between h-full">
                       <div className="flex justify-between items-start">
-                        <div className="flex flex-wrap gap-2 max-w-[70%]">
-                          {project.tags.slice(0, 2).map((tag) => (
-                            <span key={tag} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white border border-white/10 whitespace-nowrap">
-                              {tag}
-                            </span>
-                          ))}
+                        <div className="flex flex-col gap-4 max-w-[70%]">
+                          {/* Expanded Content: Tech Stack Title */}
+                          <div className="hidden group-data-[expanded=true]:block">
+                            <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                              <Zap size={16} className="text-primary" />
+                              <ProximityText label="Tech Stack" />
+                            </h4>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2">
+                            {project.tags.slice(0, 2).map((tag) => (
+                              <span key={tag} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white border border-white/10 whitespace-nowrap">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
                         </div>
+
                         <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-glow flex-shrink-0 group-data-[expanded=true]:hidden">
                           <ArrowUpRight className="text-black w-5 h-5" />
                         </div>
@@ -117,7 +144,7 @@ export function Portfolio() {
                     {/* Right Side: Details (Visible on Expand/Hover Context) */}
                     <div className="hidden group-data-[expanded=true]:flex flex-1 flex-col justify-center opacity-0 group-data-[expanded=true]:opacity-100 transition-all duration-500 delay-100">
                       <div className="mb-4">
-                        <h4 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                        <h4 className="text-lg font-bold text-white mb-2 flex items-center gap-2 md:hidden">
                           <Zap size={16} className="text-primary" /> <ProximityText label="Tech Stack" />
                         </h4>
                         <div className="flex flex-wrap gap-2">
@@ -133,13 +160,16 @@ export function Portfolio() {
                           {project.shortDescription}
                         </p>
                       </div>
-                      <Link
-                        to={`/project/${project.id}`}
-                        className="cursor-target mt-auto bg-primary text-black px-6 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#00FFAA] transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ProximityText label="Details" /> <ArrowRight size={16} />
-                      </Link>
+                      <div className="mt-auto flex items-center gap-3">
+                        <PortfolioNextButton />
+                        <Link
+                          to={`/project/${project.id}`}
+                          className="cursor-target flex-1 bg-primary text-black px-6 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#00FFAA] transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ProximityText label="Details" /> <ArrowRight size={16} />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </Card>

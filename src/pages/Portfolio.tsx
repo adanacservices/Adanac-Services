@@ -79,9 +79,9 @@ export function Portfolio() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex items-center justify-center mt-48 md:mt-64 mb-64"
+          className="flex items-center justify-center mt-64 md:mt-80 mb-64"
         >
-          <div className="relative w-full max-w-[600px] h-[400px] md:h-[500px] lg:h-[600px]">
+          <div className="relative w-full max-w-[600px] h-[500px] md:h-[600px] lg:h-[700px]">
             <CardSwap
               cardDistance={60}
               verticalDistance={60}

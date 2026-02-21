@@ -282,6 +282,18 @@ const CardSwap: React.FC<CardSwapProps> = ({
         dragStartX.current = null;
     };
 
+    // Auto-close on scroll (Mobile only)
+    useEffect(() => {
+        if (expandedIndex === null || window.innerWidth >= 768) return;
+
+        const handleScroll = () => {
+            setExpandedIndex(null);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [expandedIndex]);
+
     useEffect(() => {
         const total = refs.length;
 

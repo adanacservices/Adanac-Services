@@ -298,13 +298,13 @@ const CardSwap: React.FC<CardSwapProps> = ({
         dragStartX.current = null;
     };
 
-    // Auto-close on scroll (Mobile only) with threshold to allow internal scroll
+    // Auto-close on scroll (All devices) with threshold to allow internal scroll
     useEffect(() => {
-        if (expandedIndex === null || window.innerWidth >= 768) return;
+        if (expandedIndex === null) return;
 
         const initialScroll = window.scrollY;
         const handleScroll = () => {
-            if (Math.abs(window.scrollY - initialScroll) > 50) {
+            if (Math.abs(window.scrollY - initialScroll) > 80) {
                 setExpandedIndex(null);
             }
         };
@@ -508,11 +508,11 @@ const CardSwap: React.FC<CardSwapProps> = ({
         >
             {rendered}
 
-            {/* Mobile Navigation Arrows */}
-            {expandedIndex !== null && window.innerWidth < 768 && (
+            {/* Universal Navigation Arrows (Expanded View) */}
+            {expandedIndex !== null && (
                 <>
                     <button
-                        className="fixed left-4 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-transform"
+                        className="fixed left-4 md:left-12 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-all hover:bg-primary/20 hover:border-primary/30 group"
                         onClick={(e) => {
                             e.stopPropagation();
                             const last = order.current[order.current.length - 1];
@@ -522,10 +522,10 @@ const CardSwap: React.FC<CardSwapProps> = ({
                             setExpandedIndex(newOrder[0]);
                         }}
                     >
-                        <ChevronLeft size={24} />
+                        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
                     </button>
                     <button
-                        className="fixed right-4 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-transform"
+                        className="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md text-white active:scale-90 transition-all hover:bg-primary/20 hover:border-primary/30 group"
                         onClick={(e) => {
                             e.stopPropagation();
                             const [front, ...rest] = order.current;
@@ -534,7 +534,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
                             setExpandedIndex(newOrder[0]);
                         }}
                     >
-                        <ChevronRight size={24} />
+                        <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </>
             )}

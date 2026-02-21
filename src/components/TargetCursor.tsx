@@ -121,7 +121,29 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
             if (!activeTarget) return;
 
-            const rect = activeTarget.getBoundingClientRect();
+            let rect = activeTarget.getBoundingClientRect();
+
+            // Check for inner labels to hug text precisely. If multiple exist, find the one under/closest to mouse.
+            const innerLabels = activeTarget.querySelectorAll('.cursor-label');
+            if (innerLabels.length > 0) {
+                const { x, y } = mousePosRef.current;
+                let closestLabel: Element | null = null;
+
+                for (const label of Array.from(innerLabels)) {
+                    const lRect = label.getBoundingClientRect();
+                    // Check if mouse is within label bounds + a small buffer
+                    if (x >= lRect.left - 20 && x <= lRect.right + 20 &&
+                        y >= lRect.top - 20 && y <= lRect.bottom + 20) {
+                        closestLabel = label;
+                        break;
+                    }
+                }
+
+                if (closestLabel) {
+                    rect = closestLabel.getBoundingClientRect();
+                }
+            }
+
             const { borderWidth, cornerSize } = constants;
             targetCornerPositionsRef.current = [
                 { x: rect.left - borderWidth, y: rect.top - borderWidth },
@@ -221,7 +243,24 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             spinTl.current?.pause();
             gsap.set(cursorRef.current, { rotation: 0 });
 
-            const rect = target.getBoundingClientRect();
+            let rect = target.getBoundingClientRect();
+            const innerLabels = target.querySelectorAll('.cursor-label');
+            if (innerLabels.length > 0) {
+                const { x, y } = mousePosRef.current;
+                let closestLabel: Element | null = null;
+                for (const label of Array.from(innerLabels)) {
+                    const lRect = label.getBoundingClientRect();
+                    if (x >= lRect.left - 20 && x <= lRect.right + 20 &&
+                        y >= lRect.top - 20 && y <= lRect.bottom + 20) {
+                        closestLabel = label;
+                        break;
+                    }
+                }
+                if (closestLabel) {
+                    rect = closestLabel.getBoundingClientRect();
+                }
+            }
+
             const { borderWidth, cornerSize } = constants;
             const cursorX = gsap.getProperty(cursorRef.current, 'x') as number;
             const cursorY = gsap.getProperty(cursorRef.current, 'y') as number;

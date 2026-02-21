@@ -29,7 +29,7 @@ const ProximityText = ({
         <span
             ref={containerRef}
             style={{ position: 'relative', display: 'inline-block', verticalAlign: 'middle', ...props.style }}
-            className={containerClassName}
+            className={`cursor-label ${containerClassName ?? ''}`}
         >
             <VariableProximity
                 label={label}

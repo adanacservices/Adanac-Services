@@ -349,7 +349,7 @@ export function Home() {
                       {/* Bottom Section: Title and CTA */}
                       <div className="flex justify-between items-end">
                         <div className="space-y-2">
-                          <span className="text-primary font-bold tracking-widest uppercase text-[10px] block">
+                          <span className="text-primary font-bold tracking-widest uppercase text-[10px] mb-2 w-fit block">
                             <ProximityText label={project.category} />
                           </span>
                           <h3 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight">

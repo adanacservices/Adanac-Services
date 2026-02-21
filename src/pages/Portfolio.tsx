@@ -132,7 +132,7 @@ export function Portfolio() {
                       </div>
 
                       <div>
-                        <span className="text-primary font-bold tracking-widest uppercase text-[10px] mb-2 block">
+                        <span className="text-primary font-bold tracking-widest uppercase text-[10px] mb-2 w-fit block">
                           <ProximityText label={project.category} />
                         </span>
                         <h3 className="text-3xl font-display font-bold text-white leading-tight">

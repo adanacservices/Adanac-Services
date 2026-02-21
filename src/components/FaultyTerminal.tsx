@@ -186,12 +186,18 @@ vec3 getColor(vec2 p){
 
     float middle = digit(p);
     
+    // Performance optimization for mobile: reduce blur samples
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
     const float off = 0.002;
     float sum = digit(p + vec2(-off, -off)) + digit(p + vec2(0.0, -off)) + digit(p + vec2(off, -off)) +
                 digit(p + vec2(-off, 0.0)) + digit(p + vec2(0.0, 0.0)) + digit(p + vec2(off, 0.0)) +
                 digit(p + vec2(-off, off)) + digit(p + vec2(0.0, off)) + digit(p + vec2(off, off));
     
     vec3 baseColor = vec3(0.9) * middle + sum * 0.1 * vec3(1.0) * bar;
+    #else
+    // Lower precision/mobile optimization: just use middle sample or fewer samples
+    vec3 baseColor = vec3(1.3) * middle * vec3(1.0) * bar;
+    #endif
     return baseColor;
 }
 

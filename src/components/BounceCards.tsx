@@ -168,38 +168,42 @@ export default function BounceCards({
         if (!isMobile || !containerRef.current) return;
         const q = gsap.utils.selector(containerRef);
 
-        data.forEach((_, i) => {
-            const selector = q(`.card-${i}`);
-            const isActive = i === activeIndex;
-            const diff = i - activeIndex;
+        const ctx = gsap.context(() => {
+            data.forEach((_, i) => {
+                const selector = q(`.card-${i}`);
+                const isActive = i === activeIndex;
+                const diff = i - activeIndex;
 
-            // Stack transform logic
-            let x = 0;
-            let zIndex = 100 - Math.abs(diff);
-            let scale = 1 - Math.abs(diff) * 0.1;
-            let opacity = 1 - Math.abs(diff) * 0.4;
-            let rotate = diff * 5;
+                // Stack transform logic
+                let x = 0;
+                let zIndex = 100 - Math.abs(diff);
+                let scale = 1 - Math.abs(diff) * 0.1;
+                let opacity = 1 - Math.abs(diff) * 0.4;
+                let rotate = diff * 5;
 
-            if (isActive) {
-                x = 0;
-                scale = 1.1;
-                rotate = 0;
-                opacity = 1;
-            } else {
-                x = diff * 40; // Slight overlap stack
-            }
+                if (isActive) {
+                    x = 0;
+                    scale = 1.1;
+                    rotate = 0;
+                    opacity = 1;
+                } else {
+                    x = diff * 40; // Slight overlap stack
+                }
 
-            gsap.to(selector, {
-                x,
-                scale,
-                zIndex,
-                opacity: Math.max(0, opacity),
-                rotate,
-                duration: 0.6,
-                ease: 'power2.out',
-                overwrite: true
+                gsap.to(selector, {
+                    x,
+                    scale,
+                    zIndex,
+                    opacity: Math.max(0, opacity),
+                    rotate,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
             });
-        });
+        }, containerRef);
+
+        return () => ctx.revert();
     }, [activeIndex, isMobile, data.length]);
 
     const nextCard = useCallback(() => {
@@ -256,15 +260,20 @@ export default function BounceCards({
                         >
                             {/* Background Image with Overlay */}
                             <div className="absolute inset-0 z-0">
-                                <img className={`w-full h-full object-cover transition-all duration-500 ${isDetailVisible ? 'scale-110 opacity-30 blur-sm' : 'opacity-60 grayscale'}`} src={item.image} alt={item.title} />
+                                <img
+                                    className={`w-full h-full object-cover transition-[opacity,filter,transform] duration-500 ${isDetailVisible ? 'scale-110 opacity-30 blur-sm' : 'opacity-60 grayscale'}`}
+                                    src={item.image}
+                                    alt={item.title}
+                                    loading="lazy"
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                             </div>
 
                             {/* Card Content */}
-                            <div className="relative z-10 h-full p-6 flex flex-col justify-end">
-                                <div className={`transition-all duration-500 ${isDetailVisible ? 'transform -translate-y-4' : ''}`}>
+                            <div className="relative z-10 h-full p-6 flex flex-col justify-end pointer-events-none">
+                                <div className={`transition-transform duration-500 ease-out ${isDetailVisible ? 'transform -translate-y-4' : ''}`}>
                                     {Icon && (
-                                        <div className={`w-12 h-12 rounded-xl bg-primary/20 backdrop-blur-sm flex items-center justify-center mb-4 border border-primary/30 transition-all duration-500 ${isDetailVisible ? 'scale-110 rotate-12 bg-primary' : ''}`}>
+                                        <div className={`w-12 h-12 rounded-xl bg-primary/20 backdrop-blur-sm flex items-center justify-center mb-4 border border-primary/30 transition-[background-color,transform,color] duration-500 ${isDetailVisible ? 'scale-110 rotate-12 bg-primary' : ''}`}>
                                             <Icon className={`w-6 h-6 ${isDetailVisible ? 'text-black' : 'text-primary'}`} />
                                         </div>
                                     )}
@@ -273,7 +282,7 @@ export default function BounceCards({
                                         <ProximityText label={item.title} />
                                     </h3>
 
-                                    <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isDetailVisible ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+                                    <div className={`overflow-hidden transition-[max-height,opacity,margin] duration-500 ease-in-out ${isDetailVisible ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
                                         <p className="text-gray-300 text-sm leading-relaxed">
                                             <ProximityText label={item.desc} className="text-sm" />
                                         </p>

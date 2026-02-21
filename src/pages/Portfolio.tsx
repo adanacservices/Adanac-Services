@@ -93,7 +93,7 @@ export function Portfolio() {
               {filteredProjects.map((project, i) => (
                 <Card
                   key={project.id + i}
-                  customClass="cursor-target group !border-white/15 !bg-black/90 overflow-hidden"
+                  customClass="group !border-white/15 !bg-black/90 overflow-hidden"
                 >
                   {/* Background Image */}
                   <img

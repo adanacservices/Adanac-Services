@@ -94,7 +94,7 @@ export function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isSubscribed}
                 placeholder="Enter your email address..."
-                className={`cursor-target w-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-6 text-white text-base outline-none transition-all group-hover:border-white/20 shadow-[inset_0_1px_10px_rgba(255,255,255,0.02)] ${isSubscribed ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+                className={`w-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-6 text-white text-base outline-none transition-all group-hover:border-white/20 shadow-[inset_0_1px_10px_rgba(255,255,255,0.02)] ${isSubscribed ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
               />
               <motion.button
                 type="submit"

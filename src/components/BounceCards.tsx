@@ -250,7 +250,7 @@ export default function BounceCards({
                     return (
                         <div
                             key={idx}
-                            className={`cursor-target card card-${idx} absolute w-64 aspect-[3/4.2] border border-white/20 rounded-2xl overflow-hidden bg-black/90 backdrop-blur-md group transition-all duration-300`}
+                            className={`card card-${idx} absolute w-64 aspect-[3/4.2] border border-white/20 rounded-2xl overflow-hidden bg-black/90 backdrop-blur-md group transition-all duration-300`}
                             style={{
                                 boxShadow: isDetailVisible ? '0 30px 60px rgba(0, 255, 170, 0.2)' : '0 20px 40px rgba(0, 0, 0, 0.4)',
                                 transform: !isMobile ? (desktopTransformStyles[idx] || 'none') : 'none'

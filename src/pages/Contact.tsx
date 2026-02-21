@@ -76,7 +76,7 @@ export function Contact() {
                 { icon: Phone, label: 'Phone', value: '+91 70785 42863 / +91 92351 32023' },
                 { icon: MapPin, label: 'Location', value: 'Remote & Delhi, India' }
               ].map((item, i) => (
-                <div key={i} className="cursor-target flex items-start space-x-6 group">
+                <div key={i} className="flex items-start space-x-6 group">
                   <div className="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500 shadow-glow">
                     <item.icon className="w-6 h-6" />
                   </div>

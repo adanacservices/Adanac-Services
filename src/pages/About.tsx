@@ -102,7 +102,7 @@ export function About() {
               <SpotlightCard
                 key={i}
                 spotlightColor="rgba(0, 230, 168, 0.15)"
-                className="cursor-target !p-8 bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-primary/30 transition-all group"
+                className="!p-8 bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-primary/30 transition-all group"
               >
                 <item.icon className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
                 <h4 className="text-xl font-display font-bold text-white mb-4">

@@ -216,7 +216,7 @@ export function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
                 whileHover={{ y: -10 }}
-                className="cursor-target group relative rounded-2xl transition-all"
+                className="group relative rounded-2xl transition-all"
               >
                 <ElectricBorder
                   color="#00E6A8"
@@ -291,7 +291,7 @@ export function Home() {
                 {projects.slice(0, 4).map((project, i) => (
                   <Card
                     key={i}
-                    customClass="cursor-target group !border-white/15 !bg-black/90 overflow-hidden transition-all duration-500"
+                    customClass="group !border-white/15 !bg-black/90 overflow-hidden transition-all duration-500"
                   >
                     <img
                       src={project.img}

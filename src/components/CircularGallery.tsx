@@ -218,7 +218,7 @@ class Media {
     const container = renderer.gl.canvas.parentElement;
     if (container) {
       this.proxy = document.createElement('div');
-      this.proxy.className = 'cursor-target absolute pointer-events-auto bg-transparent';
+      this.proxy.className = 'absolute pointer-events-auto bg-transparent';
       this.proxy.style.zIndex = '10';
       // We don't want the proxy to block dragging unnecessarily, 
       // but it MUST be detectable by TargetCursor (elementFromPoint).

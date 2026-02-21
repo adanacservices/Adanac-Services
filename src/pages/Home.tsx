@@ -280,9 +280,9 @@ export function Home() {
           <div className="flex-1 flex items-center justify-center lg:justify-start w-full lg:-translate-x-12">
             <div className="relative w-full max-w-[550px] h-[400px] md:h-[600px] lg:h-[750px]">
               <CardSwap
-                cardDistance={70}
-                verticalDistance={70}
-                delay={4000}
+                cardDistance={60}
+                verticalDistance={60}
+                delay={3500}
                 pauseOnHover
                 width={500}
                 height={370}

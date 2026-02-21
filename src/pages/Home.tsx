@@ -302,23 +302,25 @@ export function Home() {
                     <div className="relative z-10 h-full p-8 flex flex-col justify-between">
                       {/* Top Section: Tags and Tech Stack Header */}
                       <div className="flex justify-between items-start">
-                        <div className="flex flex-wrap gap-2 max-w-[40%]">
-                          {project.tags.slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white border border-white/10 whitespace-nowrap"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                        <div className="flex flex-col gap-4 max-w-[60%]">
+                          {/* Expanded Content: Tech Stack Title */}
+                          <div className="hidden group-data-[expanded=true]:block">
+                            <h4 className="text-xl font-bold text-white flex items-center gap-2">
+                              <Zap size={20} className="text-primary" />
+                              <ProximityText label="Tech Stack" />
+                            </h4>
+                          </div>
 
-                        {/* Expanded Content: Tech Stack Title */}
-                        <div className="hidden group-data-[expanded=true]:block transform translate-x-4">
-                          <h4 className="text-xl font-bold text-white flex items-center gap-2">
-                            <Zap size={20} className="text-primary" />
-                            <ProximityText label="Tech Stack" />
-                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {project.tags.slice(0, 2).map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white border border-white/10 whitespace-nowrap"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
                         </div>
 
                         {/* Unexpanded Content: Arrow Icon */}

@@ -331,18 +331,32 @@ const CardSwap: React.FC<CardSwapProps> = ({
             if (tlRef.current) tlRef.current.kill();
             clearInterval(intervalRef.current);
 
-            // Kill local tweens to stop any fighting
-            refs.forEach(r => gsap.killTweensOf(r.current));
-
+            const isMobile = window.innerWidth < 768;
             const el = refs[expandedIndex].current!;
+
+            // On mobile, we want the container to be full scale when expanded to avoid double-scaling
+            if (isMobile && container.current) {
+                gsap.to(container.current, {
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    xPercent: -50,
+                    yPercent: -50,
+                    duration: 0.8,
+                    ease: 'power3.out'
+                });
+            }
 
             // Animate expansion
             gsap.to(el, {
-                width: '180%',
-                x: -150,
-                y: -50,
-                z: 100,
-                zIndex: 40,
+                width: isMobile ? '90vw' : '180%',
+                height: isMobile ? '70vh' : (typeof height === 'number' ? height * 1.2 : height),
+                x: isMobile ? 0 : -150,
+                y: isMobile ? 0 : -50,
+                z: isMobile ? 200 : 100,
+                xPercent: -50,
+                yPercent: -50,
+                zIndex: 100,
                 skewY: 0,
                 rotate: 0,
                 duration: 0.8,
@@ -367,6 +381,21 @@ const CardSwap: React.FC<CardSwapProps> = ({
             });
 
         } else {
+            // Restore container scale on mobile
+            const isMobile = window.innerWidth < 768;
+            const isSmallMobile = window.innerWidth < 480;
+            if (isMobile && container.current) {
+                gsap.to(container.current, {
+                    scale: isSmallMobile ? 0.6 : 0.8,
+                    x: 0,
+                    y: 0,
+                    xPercent: -50,
+                    yPercent: -50,
+                    duration: 0.6,
+                    ease: 'power2.inOut'
+                });
+            }
+
             // Kill any residual expansion tweens
             refs.forEach(r => gsap.killTweensOf(r.current));
 
@@ -378,6 +407,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
 
                 gsap.to(r.current, {
                     width: width,
+                    height: height,
                     x: slot.x,
                     y: slot.y,
                     z: slot.z,

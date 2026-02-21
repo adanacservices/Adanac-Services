@@ -357,7 +357,7 @@ export function Home() {
             {/* Centered BounceCards Visual */}
             <div className="w-full flex justify-center items-center min-h-[600px] relative">
               <BounceCards
-                className="max-sm:scale-[0.7] transform -translate-y-10"
+                className="transform -translate-y-10"
                 data={[
                   {
                     image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop",

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import ProximityText from './ProximityText';
 
@@ -86,6 +86,29 @@ export default function BounceCards({
         }
     };
 
+    const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = screenWidth < 768;
+
+    const responsiveTransformStyles = useMemo(() => {
+        if (!isMobile) return transformStyles;
+
+        // Scale down the translations for mobile
+        return [
+            'rotate(8deg) translate(-85px)',
+            'rotate(4deg) translate(-42px)',
+            'rotate(-2deg)',
+            'rotate(-8deg) translate(42px)',
+            'rotate(4deg) translate(85px)'
+        ];
+    }, [isMobile, transformStyles]);
+
     const pushSiblings = (idx: number) => {
         setHoveredIdx(idx);
         const q = gsap.utils.selector(containerRef);
@@ -95,20 +118,20 @@ export default function BounceCards({
             const selector = q(`.card-${i}`);
             gsap.killTweensOf(selector);
 
-            const baseTransform = transformStyles[i] || 'none';
+            const baseTransform = responsiveTransformStyles[i] || 'none';
 
             if (i === idx) {
                 const noRotation = getNoRotationTransform(baseTransform);
                 gsap.to(selector, {
                     transform: noRotation,
                     zIndex: 100,
-                    scale: 1.3,
+                    scale: isMobile ? 1.1 : 1.3,
                     duration: 0.5,
                     ease: 'back.out(1.2)',
                     overwrite: 'auto'
                 });
             } else {
-                const offsetX = i < idx ? -420 : 420;
+                const offsetX = i < idx ? (isMobile ? -140 : -420) : (isMobile ? 140 : 420);
                 const pushedTransform = getPushedTransform(baseTransform, offsetX);
 
                 const distance = Math.abs(idx - i);
@@ -136,7 +159,7 @@ export default function BounceCards({
             const selector = q(`.card-${i}`);
             gsap.killTweensOf(selector);
 
-            const baseTransform = transformStyles[i] || 'none';
+            const baseTransform = responsiveTransformStyles[i] || 'none';
             gsap.to(selector, {
                 transform: baseTransform,
                 zIndex: 10 + i,
@@ -167,7 +190,7 @@ export default function BounceCards({
                         className={`cursor-target card card-${idx} absolute w-64 aspect-[3/4.2] border border-white/20 rounded-2xl overflow-hidden bg-black/90 backdrop-blur-md group transition-all duration-300`}
                         style={{
                             boxShadow: isHovered ? '0 30px 60px rgba(0, 255, 170, 0.2)' : '0 20px 40px rgba(0, 0, 0, 0.4)',
-                            transform: transformStyles[idx] || 'none'
+                            transform: responsiveTransformStyles[idx] || 'none'
                         }}
                         onMouseEnter={() => pushSiblings(idx)}
                         onMouseLeave={resetSiblings}
